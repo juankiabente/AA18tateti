@@ -12,6 +12,7 @@ let turno;            // de quién es el turno: "X" o "O"
 let fichasPuestas;    // cuántas fichas se colocaron en total (van de 0 a 6)
 let elegida;          // casilla elegida para mover (o null si no hay ninguna)
 let terminado;        // true cuando alguien ganó
+let ultima;           // última casilla jugada (solo para animarla)
 
 // Las 8 líneas posibles para ganar (3 filas, 3 columnas, 2 diagonales)
 const LINEAS = [
@@ -35,6 +36,7 @@ function empezar() {
   fichasPuestas = 0;
   elegida = null;
   terminado = false;
+  ultima = null;
   dibujar();
 }
 
@@ -66,6 +68,7 @@ function clickCasilla(i) {
     if (tablero[i] !== "") return;        // casilla ocupada, no hace nada
     tablero[i] = turno;
     fichasPuestas++;
+    ultima = i;
     terminarTurno();
   } else {
     // FASE 2: mover fichas
@@ -75,6 +78,7 @@ function clickCasilla(i) {
       tablero[i] = turno;                  // mueve la ficha a la casilla nueva
       tablero[elegida] = "";               // y deja vacía la de antes
       elegida = null;
+      ultima = i;
       terminarTurno();
       return;
     }
@@ -103,9 +107,17 @@ function dibujar() {
     boton.textContent = tablero[i];
     if (i === elegida) boton.classList.add("elegida");
     if (ganadora && ganadora.includes(i)) boton.classList.add("ganadora");
+    if (i === ultima) boton.classList.add("nueva");
+    if (elegida !== null && tablero[i] === "" && sonVecinas(elegida, i)) boton.classList.add("destino");
     boton.onclick = function () { clickCasilla(i); };
     divTablero.appendChild(boton);
   }
+  ultima = null;   // así la animación de "nueva" se ve una sola vez
+
+  // Le avisamos al CSS de quién es el turno y en qué fase estamos (para los colores)
+  document.body.dataset.turno = turno;
+  document.body.dataset.fase = (fichasPuestas < 6) ? "colocar" : "mover";
+  document.body.classList.toggle("terminado", terminado);
 
   // Mensaje de arriba
   if (terminado) {
