@@ -1,0 +1,70 @@
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    --fondo: #f5f3ee;
+    --texto: #23262b;
+    --casilla: #ffffff;
+    --borde: #cfcac0;
+    --x: #c2412d;
+    --o: #1f6f8b;
+    --seleccion: #e8b923;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --fondo: #1b1d21; --texto: #ececec; --casilla: #272a30;
+      --borde: #43474f; --x: #ff7a66; --o: #59b7d6; --seleccion: #e8b923;
+    }
+  }
+  :root[data-theme="dark"] {
+    --fondo: #1b1d21; --texto: #ececec; --casilla: #272a30;
+    --borde: #43474f; --x: #ff7a66; --o: #59b7d6; --seleccion: #e8b923;
+  }
+
+  body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+  }
+  h1 { margin: 0 0 4px; font-size: 1.8rem; }
+  #mensaje { font-size: 1.1rem; min-height: 1.5em; margin: 8px 0 16px; text-align: center; }
+
+  /* El tablero es una grilla de 3 x 3 */
+  #tablero {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    width: min(90vw, 360px);
+  }
+  .casilla {
+    aspect-ratio: 1;
+    background: var(--casilla);
+    border: 2px solid var(--borde);
+    border-radius: 8px;
+    font-size: 3rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--texto);
+  }
+  .casilla:focus-visible { outline: 3px solid var(--seleccion); outline-offset: 2px; }
+  .casilla.X { color: var(--x); }
+  .casilla.O { color: var(--o); }
+  .casilla.elegida { border-color: var(--seleccion); border-width: 4px; }
+  .casilla.ganadora { background: var(--seleccion); color: #23262b; }
+
+  #reiniciar {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: 2px solid var(--borde);
+    border-radius: 8px;
+    background: var(--casilla);
+    color: var(--texto);
+    cursor: pointer;
+  }
+  #reglas { max-width: 360px; margin-top: 24px; font-size: 0.9rem; line-height: 1.5; opacity: 0.85; }
